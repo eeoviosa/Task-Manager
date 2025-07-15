@@ -18,7 +18,7 @@ TaskMaster is a mobile task management app built with **React Native (Expo)**. I
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/task_manager.git
+git clone https://github.com/eeoviosa/task_manager.git
 cd task_manager
 ```
 
@@ -98,12 +98,6 @@ eas build --platform android --profile preview
 This will generate a downloadable `.apk` file for Android.
 
 > Requires Expo account + Git installed
-
----
-
-## 📸 Screenshots
-
-> *(Insert screenshots of the welcome screen, calendar, and task view here)*
 
 ---
 
