@@ -8,8 +8,6 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  NativeScrollEvent,
-  NativeSyntheticEvent
 } from 'react-native';
 import { useTaskContext, Task } from '@/context/TaskContext';
 import dayjs from 'dayjs';

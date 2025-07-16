@@ -1,16 +1,16 @@
 # 📋 TaskMaster – Expo Task Manager App
 
-TaskMaster is a mobile task management app built with **React Native (Expo)**. It allows users to add, view, and organize tasks using a clean calendar interface, time grouping, and status indicators.
+**TaskMaster** is a mobile task management application built with **React Native (Expo)**. It enables users to add, view, and organize tasks using a clean, scrollable calendar interface, with time grouping and status indicators for better productivity and clarity.
 
 ---
 
 ## 🚀 Features
 
-- ✅ Add and view tasks by date
-- 🕒 Tasks grouped by start time
-- 📅 Scrollable calendar with dynamic date selection
-- 🏷️ Status tags for each task
-- 🔄 Smooth navigation using Expo Router
+- ✅ Add and view tasks by selected date  
+- 🕒 Tasks grouped by start time  
+- 📅 Scrollable calendar with dynamic date highlighting  
+- 🏷️ Status tags to indicate task progress  
+- 🔄 Seamless navigation using Expo Router  
 
 ---
 
@@ -24,6 +24,7 @@ cd task_manager
 
 ### 2. Install Dependencies
 Make sure you have [Node.js](https://nodejs.org) and [Expo CLI](https://docs.expo.dev/get-started/installation/) installed:
+
 ```bash
 npm install
 ```
@@ -33,7 +34,7 @@ npm install
 npx expo start
 ```
 
-Scan the QR code using **Expo Go** on your mobile device.
+Then scan the QR code using **Expo Go** on your mobile device.
 
 ---
 
@@ -46,69 +47,67 @@ task_manager/
 │   ├── welcome.tsx         # Welcome screen
 │   └── _layout.tsx         # Root layout
 ├── assets/                 # Images, fonts, and icons
-├── context/                # TaskContext for global state
-├── constants/              # Icon and image exports
-├── app.json                # App configuration
+├── context/                # Global TaskContext provider
+├── constants/              # Icon and image constants
+├── app.json                # App configuration file
 ├── eas.json                # EAS build profiles
-├── tailwind.config.js      # Nativewind/Tailwind setup
-└── README.md               # You're here!
+├── tailwind.config.js      # NativeWind/Tailwind CSS config
+└── README.md               # This file
 ```
 
 ---
 
-## 📱 How It Works
+## 📱 App Flow Overview
 
-### 1. Welcome Screen
-- Splash-style welcome screen with logo and "Get Started" button.
+### 🔹 Welcome Screen  
+- Branding splash with a "Get Started" call-to-action.
 
-### 2. Calendar View
-- Horizontal scrollable calendar with active date highlighting.
-- Tasks are filtered by selected date.
+### 🔹 Calendar View  
+- Horizontal, scrollable calendar  
+- Highlights the selected date  
+- Displays tasks filtered by date  
 
-### 3. Task View
-- Tasks are grouped by their `fromTime` (e.g., `09:00 AM`)
-- Each group displays:
-  - Task description
-  - Time range
-  - Status tag (e.g., “In Progress”)
+### 🔹 Task View  
+- Tasks are grouped by their `fromTime` (e.g., "09:00 AM")  
+- Each task displays:
+  - Description  
+  - Time range  
+  - Status tag  
 
-### 4. Add Task
-- Navigate to **Add Task** screen to input description, time, and status.
+### 🔹 Add Task  
+- Navigate to a dedicated screen to:
+  - Input description  
+  - Select start/end time  
+  - Choose status tag  
 
 ---
 
-## ⚙️ Development Tools
+## 🛠️ Tech Stack
 
-- **React Native**
+- **React Native (Expo)**
 - **Expo Router**
 - **NativeWind / Tailwind CSS**
-- **Day.js** for date/time formatting
-- **EAS Build** for testing APK
 
 ---
 
-## 🛠 Build APK (Optional)
+## 📚 Third-Party Libraries
 
-If you want to build the app for testing:
-
-```bash
-eas build --platform android --profile preview
-```
-
-This will generate a downloadable `.apk` file for Android.
-
-> Requires Expo account + Git installed
+- `dayjs` – Lightweight date/time parsing and formatting  
+- `react-native-modal-datetime-picker` – Modal UI for picking dates and times  
+- `@react-native-community/datetimepicker` – Native picker for iOS and Android  
+- `NativeWind` – Tailwind utility classes for React Native  
 
 ---
 
 ## 📄 License
 
-This project is for educational use. Feel free to fork or build on top of it!
+This project is intended for educational and demo purposes.  
+Feel free to fork, contribute, or build upon it!
 
 ---
 
 ## 🤝 Contact
 
 Built by **Emmanuel Oviosa**  
-📧 oviosae13@gmail.com  
-📍 McKinney, TX
+📧 [oviosae13@gmail.com](mailto:oviosae13@gmail.com)  
+📍 McKinney, TX  
