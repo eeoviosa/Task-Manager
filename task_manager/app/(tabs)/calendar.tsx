@@ -33,7 +33,7 @@ const ScheduleScreen = () => {
 
         const todayIndex = dates.findIndex(d => d.format('YYYY-MM-DD') === selectedDate);
 
-    // Approximate width: each button is ~70px wide including margin
+    // Approximate width: each button is ~53px wide including margin
     const scrollToX = todayIndex * 53;
 
     if (scrollRef.current) {
