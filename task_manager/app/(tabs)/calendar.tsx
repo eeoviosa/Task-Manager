@@ -12,25 +12,31 @@ import {
 import { useTaskContext, Task } from '@/context/TaskContext';
 import dayjs from 'dayjs';
 
+// Main schedule view to display tasks grouped by hour
 const ScheduleScreen = () => {
   const { tasks, completeTask, removeTask } = useTaskContext();
 
+  // Current month and selected date state
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
+
+  // State for task selection and modal
   const [selectedTaskIndex, setSelectedTaskIndex] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
 
+  // Reset selected date whenever the month changes
   useEffect(() => {
     setSelectedDate(dayjs().format('YYYY-MM-DD'));
   }, [currentMonth]);
 
+  // Handle previous/next month navigation
   const handleMonthChange = (direction: 'prev' | 'next') => {
     setCurrentMonth(prev =>
       direction === 'prev' ? prev.subtract(1, 'month') : prev.add(1, 'month')
     );
   };
 
-  // Generate date options for the current month
+  // Generate array of all dates in current month
   const startOfMonth = currentMonth.startOf('month');
   const endOfMonth = currentMonth.endOf('month');
   const numberOfDays = endOfMonth.date();
@@ -38,10 +44,12 @@ const ScheduleScreen = () => {
     startOfMonth.add(i, 'day')
   );
 
+  // Filter tasks by the selected date
   const filteredTasks = tasks
-    .map((task, index) => ({ ...task, index }))
+    .map((task, index) => ({ ...task, index })) // Keep task index for operations
     .filter(task => dayjs(task.fromTime).format('YYYY-MM-DD') === selectedDate);
 
+  // Group filtered tasks by hour (e.g., '09:00 AM')
   const groupedByHour = filteredTasks.reduce(
     (acc: Record<string, typeof filteredTasks>, task) => {
       const hour = dayjs(task.fromTime).format('hh:mm A');
@@ -52,29 +60,35 @@ const ScheduleScreen = () => {
     {}
   );
 
+  // Sort tasks within each hour group by end time
   Object.keys(groupedByHour).forEach(hour => {
     groupedByHour[hour].sort((a, b) => a.toTime.getTime() - b.toTime.getTime());
   });
 
+  // Sort the hours themselves chronologically
   const sortedHours = Object.keys(groupedByHour).sort((a, b) =>
     dayjs(a, 'hh:mm A').isBefore(dayjs(b, 'hh:mm A')) ? -1 : 1
   );
 
+  // Handle long press to show modal options
   const handleLongPress = (index: number) => {
     setSelectedTaskIndex(index);
     setModalVisible(true);
   };
 
+  // Mark selected task as complete
   const markAsComplete = () => {
     if (selectedTaskIndex !== null) completeTask(selectedTaskIndex);
     setModalVisible(false);
   };
 
+  // Delete selected task
   const deleteTask = () => {
     if (selectedTaskIndex !== null) removeTask(selectedTaskIndex);
     setModalVisible(false);
   };
 
+  // Render task status tag
   const renderStatusTag = (task: Task) => {
     const isComplete = task.status === 'completed';
     const tagColor = isComplete ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800';
@@ -89,7 +103,7 @@ const ScheduleScreen = () => {
 
   return (
     <SafeAreaView className="mt-10 flex-1 bg-white">
-      {/* Month Header */}
+      {/* Month Navigation Header */}
       <View className="flex-row justify-between items-center px-4 pt-4 pb-2">
         <TouchableOpacity onPress={() => handleMonthChange('prev')}>
           <Text className="text-lg text-blue-500">◀</Text>
@@ -100,7 +114,7 @@ const ScheduleScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Horizontal Scrollable Date Selector */}
+      {/* Horizontal Scrollable Calendar */}
       <View className="px-4 py-2">
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {dates.map(date => {
@@ -122,7 +136,7 @@ const ScheduleScreen = () => {
         </ScrollView>
       </View>
 
-      {/* Task Groups by Hour */}
+      {/* Display grouped tasks or empty message */}
       {sortedHours.length === 0 ? (
         <View className="flex-1 justify-center items-center">
           <Text className="text-gray-500 text-lg">No tasks for this day.</Text>
@@ -156,7 +170,7 @@ const ScheduleScreen = () => {
         />
       )}
 
-      {/* Modal */}
+      {/* Modal for Task Options */}
       <Modal
         transparent
         visible={modalVisible}
@@ -167,6 +181,7 @@ const ScheduleScreen = () => {
           <View className="bg-white rounded-t-2xl px-4 py-6">
             <Text className="text-center font-semibold text-lg mb-4">Task Options</Text>
 
+            {/* Mark Complete */}
             <TouchableOpacity
               onPress={markAsComplete}
               className="py-3 border-b border-gray-200"
@@ -174,6 +189,7 @@ const ScheduleScreen = () => {
               <Text className="text-center text-blue-600 font-semibold">Mark as Complete</Text>
             </TouchableOpacity>
 
+            {/* Delete */}
             <TouchableOpacity
               onPress={deleteTask}
               className="py-3 border-b border-gray-200"
@@ -181,6 +197,7 @@ const ScheduleScreen = () => {
               <Text className="text-center text-red-600 font-semibold">Delete Task</Text>
             </TouchableOpacity>
 
+            {/* Cancel */}
             <TouchableOpacity onPress={() => setModalVisible(false)} className="py-3">
               <Text className="text-center font-medium text-gray-700">Cancel</Text>
             </TouchableOpacity>
