@@ -4,12 +4,11 @@ import {
   Text,
   FlatList,
   Pressable,
-  Modal,
-  TouchableOpacity,
   SafeAreaView
 } from 'react-native';
 import { useTaskContext, Task } from '@/context/TaskContext';
 import dayjs from 'dayjs';
+import TaskOptionsModal from '@/components/TaskOptionsModal';
 
 // Define possible filter options
 type FilterType = 'all' | 'in-progress' | 'completed';
@@ -123,7 +122,7 @@ const TaskList = () => {
           renderItem={({ item, index }) => (
             <Pressable
               onLongPress={() => handleLongPress(index)}
-              className="mb-4 bg-white p-4 rounded-2xl shadow-md border border-gray-100"
+              className="mb-4 bg-white p-4 rounded-2xl shadow border border-gray-200"
             >
               <Text className="text-base font-semibold text-gray-800 mb-1">
                 {item.description}
@@ -140,49 +139,13 @@ const TaskList = () => {
         />
       )}
 
-      {/* Task Options Modal */}
-      <Modal
-        transparent
-        visible={modalVisible}
-        animationType="fade"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View className="flex-1 justify-end bg-black/30">
-          <View className="bg-white rounded-t-3xl px-6 pt-6 pb-10 shadow-lg">
-            <Text className="text-center font-bold text-lg text-gray-800 mb-6">
-              Task Options
-            </Text>
-
-            {/* Mark as Complete */}
-            <TouchableOpacity
-              onPress={markAsComplete}
-              className="py-4 bg-blue-50 rounded-xl mb-3"
-            >
-              <Text className="text-center text-blue-600 font-semibold">
-                ✅ Mark as Complete
-              </Text>
-            </TouchableOpacity>
-
-            {/* Delete Task */}
-            <TouchableOpacity
-              onPress={deleteTask}
-              className="py-4 bg-red-50 rounded-xl mb-3"
-            >
-              <Text className="text-center text-red-600 font-semibold">
-                🗑️ Delete Task
-              </Text>
-            </TouchableOpacity>
-
-            {/* Cancel */}
-            <TouchableOpacity
-              onPress={() => setModalVisible(false)}
-              className="py-4 bg-gray-100 rounded-xl"
-            >
-              <Text className="text-center text-gray-600 font-medium">Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+    {/* Modal for Task Options */}
+      <TaskOptionsModal
+      visible={modalVisible}
+      onClose={() => setModalVisible(false)}
+      onComplete={markAsComplete}
+      onDelete={deleteTask}
+      />
     </SafeAreaView>
   );
 };

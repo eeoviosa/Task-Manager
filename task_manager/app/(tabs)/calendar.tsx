@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
   FlatList,
   Pressable,
-  Modal,
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
 } from 'react-native';
 import { useTaskContext, Task } from '@/context/TaskContext';
+import TaskOptionsModal from '@/components/TaskOptionsModal';
 import dayjs from 'dayjs';
 
 // Main schedule view to display tasks grouped by hour
 const ScheduleScreen = () => {
   const { tasks, completeTask, removeTask } = useTaskContext();
 
+  const scrollRef = useRef<ScrollView>(null);
   // Current month and selected date state
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
@@ -26,7 +27,16 @@ const ScheduleScreen = () => {
 
   // Reset selected date whenever the month changes
   useEffect(() => {
-    setSelectedDate(dayjs().format('YYYY-MM-DD'));
+      setSelectedDate(dayjs().format('YYYY-MM-DD'));
+
+        const todayIndex = dates.findIndex(d => d.format('YYYY-MM-DD') === selectedDate);
+
+    // Approximate width: each button is ~70px wide including margin
+    const scrollToX = todayIndex * 53;
+
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ x: scrollToX, animated: true });
+    }
   }, [currentMonth]);
 
   // Handle previous/next month navigation
@@ -95,8 +105,10 @@ const ScheduleScreen = () => {
     const text = isComplete ? 'Completed ✅' : 'In Progress';
 
     return (
-      <View className={`px-2 py-1 rounded-full ${tagColor}`}>
-        <Text className="text-xs font-semibold">{text}</Text>
+      <View className="flex-row justify-end">
+        <View className={`px-2 py-1 rounded-full ${tagColor}`}>
+          <Text className="text-xs font-semibold">{text}</Text>
+        </View>
       </View>
     );
   };
@@ -116,7 +128,7 @@ const ScheduleScreen = () => {
 
       {/* Horizontal Scrollable Calendar */}
       <View className="px-4 py-2">
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView ref = {scrollRef} horizontal showsHorizontalScrollIndicator={false}>
           {dates.map(date => {
             const formatted = date.format('YYYY-MM-DD');
             const isSelected = formatted === selectedDate;
@@ -158,11 +170,15 @@ const ScheduleScreen = () => {
                     <Text className="font-semibold text-base text-gray-900">
                       {task.description}
                     </Text>
+                 
+                  </View>
+
+                  <View className="flex-row justify-between items-center mb-2">
+                    <Text className="text-sm text-gray-600">
+                      {dayjs(task.fromTime).format('hh:mm A')} → {dayjs(task.toTime).format('hh:mm A')}
+                    </Text>
                     {renderStatusTag(task)}
                   </View>
-                  <Text className="text-sm text-gray-600">
-                    {dayjs(task.fromTime).format('hh:mm A')} → {dayjs(task.toTime).format('hh:mm A')}
-                  </Text>
                 </Pressable>
               ))}
             </View>
@@ -171,39 +187,12 @@ const ScheduleScreen = () => {
       )}
 
       {/* Modal for Task Options */}
-      <Modal
-        transparent
-        visible={modalVisible}
-        animationType="fade"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View className="flex-1 justify-end bg-black/30">
-          <View className="bg-white rounded-t-2xl px-4 py-6">
-            <Text className="text-center font-semibold text-lg mb-4">Task Options</Text>
-
-            {/* Mark Complete */}
-            <TouchableOpacity
-              onPress={markAsComplete}
-              className="py-3 border-b border-gray-200"
-            >
-              <Text className="text-center text-blue-600 font-semibold">Mark as Complete</Text>
-            </TouchableOpacity>
-
-            {/* Delete */}
-            <TouchableOpacity
-              onPress={deleteTask}
-              className="py-3 border-b border-gray-200"
-            >
-              <Text className="text-center text-red-600 font-semibold">Delete Task</Text>
-            </TouchableOpacity>
-
-            {/* Cancel */}
-            <TouchableOpacity onPress={() => setModalVisible(false)} className="py-3">
-              <Text className="text-center font-medium text-gray-700">Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      <TaskOptionsModal
+      visible={modalVisible}
+      onClose={() => setModalVisible(false)}
+      onComplete={markAsComplete}
+      onDelete={deleteTask}
+      />
     </SafeAreaView>
   );
 };

@@ -9,15 +9,8 @@ import {
   ScrollView
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { useTaskContext } from '@/context/TaskContext';
+import { useTaskContext, Task} from '@/context/TaskContext';
 import dayjs from 'dayjs';
-
-// Define the attributes of a Task object
-type Task = {
-  description: string;
-  fromTime: Date;
-  toTime: Date;
-};
 
 // TaskForm component allows input of task details
 const TaskForm = ({ onSubmit }: { onSubmit?: (task: Task) => void }) => {
