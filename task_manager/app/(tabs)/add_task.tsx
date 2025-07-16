@@ -12,7 +12,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useTaskContext } from '@/context/TaskContext';
 import dayjs from 'dayjs';
 
-// Define the shape of a Task object
+// Define the attributes of a Task object
 type Task = {
   description: string;
   fromTime: Date;
@@ -75,7 +75,7 @@ const TaskForm = ({ onSubmit }: { onSubmit?: (task: Task) => void }) => {
     };
 
     if (onSubmit) onSubmit(task);
-    Alert.alert('Success', 'Task saved successfully!');
+    Alert.alert('Success', 'Task created successfully!');
 
     // Reset form
     setDescription('');
